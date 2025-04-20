@@ -36,12 +36,13 @@ def load_user(user_id):
 class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(80), nullable=False, unique=True)
+    email = db.Column(db.String(120), nullable=False, unique=True)
     password = db.Column(db.String(200), nullable=False)
     recipes = db.relationship('Recipe', backref='author', lazy=True)
 
 class RegisterForm(FlaskForm):
     username = StringField(validators=[InputRequired(), Length(min=4, max=20)], render_kw={"placeholder":"Username"})
-    
+    email = StringField(validators=[InputRequired(), Length(min=4, max=120)], render_kw={"placeholder":"Email"})
     password = PasswordField(validators=[InputRequired(), Length(min=4, max=20)], render_kw={"placeholder":"Password"})
     
     submit = SubmitField("Register")
@@ -51,6 +52,12 @@ class RegisterForm(FlaskForm):
 
         if existing_user_username:
              raise ValidationError("That username already exists. Please choose a different one.")
+   
+    def validate_email(self, email):
+        existing_user_email = User.query.filter_by(email=email.data).first()
+
+        if existing_user_email:
+             raise ValidationError("That email address already exists. Please choose a different one.")
 
 class LoginForm(FlaskForm):
     username = StringField(validators=[InputRequired(), Length(min=4, max=20)], render_kw={"placeholder":"Username"})
@@ -118,7 +125,7 @@ def register():
 
     if form.validate_on_submit():
         hashed_password = bcrypt.generate_password_hash(form.password.data)
-        new_user = User(username=form.username.data, password=hashed_password)
+        new_user = User(username=form.username.data, email=form.email.data, password=hashed_password)
         db.session.add(new_user)
         db.session.commit()
         return redirect(url_for('login'))
