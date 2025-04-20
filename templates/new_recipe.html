@@ -1,0 +1,38 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>New Recipe</title>
+</head>
+<body>
+    <h1>Add New Recipe</h1>
+    <form method="POST">
+        {{ form.hidden_tag() }}
+        <p>
+            {{ form.title.label }}<br>
+            {{ form.title(size=32) }}
+        </p>
+        <p>
+            {{ form.description.label }}<br>
+            {{ form.description(cols=40, rows=4) }}
+        </p>
+        <p>
+            {{ form.ingredients.label }}<br>
+            {{ form.ingredients(cols=40, rows=4) }}
+        </p>
+        <p>
+            {{ form.instructions.label }}<br>
+            {{ form.instructions(cols=40, row=4) }}
+        </p>
+        <p>{{ form.submit() }}</p>
+    </form>
+    <nav>
+        <ul>
+            <li><a href="{{ url_for('show_recipes') }}">Back to Recipes</a></li>
+            <li><a href="{{ url_for('logout') }}">Press Here for Logout</a></li>
+        </ul>
+    </nav>
+</body>
+</html>
+

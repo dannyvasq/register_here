@@ -1,0 +1,35 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ recipe.title }}</title>
+</head>
+<body>
+    <h1>{{ recipe.title }}</h1>
+    <p><strong>Description:</strong> {{ recipe.description }}</p>
+    <p><strong>Ingredients:</strong></p>
+    <ul>
+        {% for ingredient in recipe.ingredients.split('\n') %}
+        <li>{{ ingredient }}</li>
+        {% endfor %}
+    </ul>
+    <p><strong>Instructions:</strong></p>
+    <ol>
+        {% for instruction in recipe.instructions.split('\n') %}
+        <li>{{ instruction }}</li>
+        {% endfor %}
+    </ol>
+    <p><strong>Created on:</strong> {{ recipe.created.strftime('%B %d, %Y at %I:%M %p') }}</p>
+    <form action="{{ url_for('delete_recipe', id=recipe.id) }}" method="POST" style="display:inline;">
+        <button type="submit">Delete Recipe</button>
+    <nav>
+        <ul>
+            <li><a href="{{ url_for('show_recipes') }}">Back to Recipes</a></li>
+            <li><a href="{{ url_for('logout') }}">Press Here for Logout</a></li>
+        </ul>
+    </nav>
+</body>
+</html>
+
