@@ -1,23 +1,27 @@
 
-# Import various field types and validators from wtforms
-from wtforms import StringField, TextAreaField, SubmitField
-from wtforms.validators import DataRequired
+from flask_wtf import FlaskForm
+from wtforms import StringField, PasswordField, SubmitField, TextAreaField
+from wtforms.validators import DataRequired, Length, Email, EqualTo
 
-# Define a form class for creating and submitting recipes
+class RegistrationForm(FlaskForm):
+    username = StringField('Username', validators=[DataRequired(), Length(min=2, max=20)])
+    email = StringField('Email', validators=[DataRequired(), Email()])
+    password = PasswordField('Password', validators=[DataRequired()])
+    confirm_password = PasswordField('Confirm Password', validators=[DataRequired(), EqualTo('password')])
+    submit = SubmitField('Sign Up')
+
+class LoginForm(FlaskForm):
+    email = StringField('Email', validators=[DataRequired(), Email()])
+    password = PasswordField('Password', validators=[DataRequired()])
+    submit = SubmitField('Login')
+
 class RecipeForm(FlaskForm):
-
-    # Define a title field that is a string and is required
-    title = StringField('Title', validators=[DataRequired()])
-    
-    # Define a description field that is a text area and is required
+    title = StringField('Recipe Title', validators=[DataRequired()])
     description = TextAreaField('Description', validators=[DataRequired()])
-    
-    # Define an ingredients field that is a text area and is required
-    ingredients = TextAreaField('Ingredients', validators=[DataRequired()])
-    
-    # Define an instructions field that is a text area and is required
-    instructions = TextAreaField('Instructions', validators=[DataRequired()])
-    
-    # Define a submit button for the form
-    submit = SubmitField('Submit')
+    submit = SubmitField('Submit Recipe')
+
+class VisitorEmailForm(FlaskForm):
+    email = StringField('Enter your Email', validators=[DataRequired(), Email()])
+    submit = SubmitField('View Recipes')
+
 

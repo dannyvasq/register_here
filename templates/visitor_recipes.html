@@ -1,0 +1,13 @@
+
+{% extends "base.html" %}
+{% block title %}Visitor Recipes{% endblock %}
+{% block content %}
+<h2>Public Recipes</h2>
+<ul>
+    {% for recipe in recipes %}
+        <li><strong>{{ recipe.title }}</strong> — {{ recipe.description }}</li>
+    {% endfor %}
+</ul>
+<p><a href="{{ url_for('main.home') }}">Back to Home</a></p>
+{% endblock %}
+
