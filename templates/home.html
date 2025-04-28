@@ -4,14 +4,33 @@
 {% block content %}
 <h1>Welcome to the Recipe App!</h1>
 
-<h2>Visitor Access</h2>
-<form method="POST">
-    {{ form.hidden_tag() }}
-    <p>{{ form.email.label }}<br>{{ form.email(size=32) }}</p>
-    <p>{{ form.submit() }}</p>
-</form>
+<hr>
 
-<p>Or <a href="{{ url_for('login') }}">Login</a> / <a href="{{ url_for('register') }}">Register</a> for full access.</p>
+<h2>Latest Recipes</h2>
+
+{% if recipes %}
+    <ul>
+    {% for recipe in recipes %}
+        <li>
+            <a href="{{ url_for('recipe_details', id=recipe.id) }}">{{ recipe.title }}</a>
+            —
+            {% if current_user.is_authenticated %}
+                <a href="{{ url_for('user_recipes', user_id=recipe.user.id) }}">{{ recipe.user.username }}</a>
+            {% else %}
+                {{ recipe.user.username }}
+            {% endif %}
+            on {{ recipe.created.strftime('%B %d, %Y') }}
+        </li>
+    {% endfor %}
+    </ul>
+{% else %}
+    <p>No recipes yet. Be the first to add one!</p>
+    <a href="{{ url_for('login') }}">
+        <button style="padding: 10px 20px; font-size: 16px; background-color: #4CAF50; color: white; border: none; border-radius: 5px; cursor: pointer;">
+            Login to Add Your First Recipe
+        </button>
+    </a>  
+{% endif %}
 {% endblock %}
 
 

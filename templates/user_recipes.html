@@ -1,0 +1,19 @@
+
+{% extends "base.html" %}
+{% block title %}{{ user.username }}'s Recipes{% endblock %}
+{% block content %}
+<h1>{{ user.username }}'s Recipes</h1>
+
+{% if recipes %}
+    <ul>
+    {% for recipe in recipes %}
+        <li>
+            <a href="{{ url_for('recipe_details', id=recipe.id) }}">{{ recipe.title }}</a>
+        </li>
+    {% endfor %}
+    </ul>
+{% else %}
+    <p>This user has not created any recipes yet.</p>
+{% endif %}
+{% endblock %}
+

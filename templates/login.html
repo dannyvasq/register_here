@@ -9,5 +9,12 @@
     <p>{{ form.password.label }}<br>{{ form.password(size=32) }}</p>
     <p>{{ form.submit() }}</p>
 </form>
+
+<p>
+    Don't have an account?
+    <a href="{{ url_for('register') }}">Register here</a>.
+</p>
 {% endblock %}
+
+
 
