@@ -1,5 +1,5 @@
 
-from flask import Flask, render_template, redirect, url_for, flash, session
+from flask import Flask, render_template, redirect, url_for, flash, session, request
 from forms import RegistrationForm, LoginForm, RecipeForm, VisitorEmailForm, ProfileForm
 from models import db, User, Recipe, Profile
 from flask_login import LoginManager, login_user, logout_user, login_required, current_user
@@ -36,7 +36,11 @@ def home():
 def visitor_recipes():
     if 'visitor_email' not in session:
         return redirect(url_for('home'))
-    recipes = Recipe.query.all()
+    search_query = request.args.get('q', '')  
+    if search_query:
+        recipes = Recipe.query.filter(Recipe.title.ilike(f'%{search_query}%')).all()
+    else:
+        recipes = Recipe.query.all()
     return render_template('visitor_recipes.html', recipes=recipes)
 
 @app.route('/login', methods=['GET','POST'])
