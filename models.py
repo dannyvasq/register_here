@@ -1,5 +1,5 @@
 
-from register_here import db, login_manager
+from __init__ import db, login_manager
 from flask_login import UserMixin
 
 @login_manager.user_loader
@@ -19,3 +19,11 @@ class Recipe(db.Model):
     description = db.Column(db.Text, nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
 
+#Users have individual displays profiles tied to their account, which are optional
+class Profile(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String(20), unique=True, nullable=False)
+    bio = db.Column(db.Text, nullable=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+
+    

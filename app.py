@@ -1,7 +1,7 @@
 
 from flask import Flask, render_template, redirect, url_for, flash, session
-from register_here.forms import RegistrationForm, LoginForm, RecipeForm, VisitorEmailForm
-from register_here.models import db, User, Recipe
+from forms import RegistrationForm, LoginForm, RecipeForm, VisitorEmailForm, ProfileForm
+from models import db, User, Recipe, Profile
 from flask_login import LoginManager, login_user, logout_user, login_required, current_user
 import os
 
@@ -9,7 +9,7 @@ app = Flask(__name__)
 app.secret_key = 'your_super_secret_key_here'
 
 basedir = os.path.abspath(os.path.dirname(__file__))
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.join(basedir, 'register_here', 'site.db')
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.join(basedir, 'site.db')
 db.init_app(app)
 
 login_manager = LoginManager()
@@ -78,6 +78,25 @@ def make_recipe():
         db.session.commit()
         return redirect(url_for('recipes'))
     return render_template('new_recipe.html', form=form)
+
+@app.route('/profile', methods=['POST'])
+@login_required
+def view_profile():
+    profile = Profile.query.filter_by(user_id=current_user.id).all()
+    recipes = Recipe.query.filter_by(user_id=current_user.id).all()
+    return render_template('profile.html',profile=profile,recipes=recipes)
+
+@app.route('/edit_profile', methods=['GET', 'POST'])
+@login_required
+def edit_profile():
+    #update database for display info on profile
+    form = ProfileForm()
+    if form.validate_on_submit():
+        profile = Profile(id=form.id.data, username=form.username.data, bio=form.bio.data, user_id=current_user.id)
+        profile.bio = form.bio.data
+        db.session.commit()
+        flash("Profile updated.")
+    return render_template('edit_profile.html',form=form)
 
 @app.route('/logout')
 def logout():

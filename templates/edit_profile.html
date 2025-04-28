@@ -1,0 +1,22 @@
+
+#displaying contents of old form and offering space to add new information in
+<html lang='en'>
+<head>
+<meta charset="UTF-8">
+<title>Edit Profile</title>
+</head>
+<body>
+<h1>Current Bio for User {{ profile.username }}</h1>
+{{ profile.bio }}<br>
+<body>
+    <form method="POST">
+    <h2>New bio:</h2>
+      {{ form.bio }}<br>
+      {{ form.submit }}
+    </form>
+<nav>
+    <ul>
+        <li><a href="{{ url_for('profile') }}">Back to Profile</a></li>
+</body>
+</html>
+
