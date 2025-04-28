@@ -76,15 +76,19 @@
 
     <!-- Bottom navbar: regular nav links -->
     <div class="bottom-navbar">
-        <a href="{{ url_for('home') }}">Home</a>
-        {% if current_user.is_authenticated %}
-            <a href="{{ url_for('recipes') }}">My Recipes</a>
-            <a href="{{ url_for('make_recipe') }}">Make Recipe</a>
-        {% elif session.get('visitor_email') %}
-            <a href="{{ url_for('visitor_recipes') }}">Visitor Recipes</a>
-        {% else %}
-            <a href="{{ url_for('register') }}">Register</a>
-        {% endif %}
+    <a href="{{ url_for('home') }}" {% if request.endpoint == 'home' %}class="active"{% endif %}>Home</a>
+
+    {% if current_user.is_authenticated %}
+        <a href="{{ url_for('recipes') }}" {% if request.endpoint == 'recipes' %}class="active"{% endif %}>My Recipes</a>
+        <a href="{{ url_for('make_recipe') }}" {% if request.endpoint == 'make_recipe' %}class="active"{% endif %}>Make Recipe</a>
+        <a href="{{ url_for('logout') }}">Logout</a>
+    {% elif session.get('visitor_email') %}
+        <a href="{{ url_for('visitor_recipes') }}" {% if request.endpoint == 'visitor_recipes' %}class="active"{% endif %}>Visitor Recipes</a>
+        <a href="{{ url_for('logout') }}">Exit Visitor Mode</a>
+    {% else %}
+        <a href="{{ url_for('login') }}" {% if request.endpoint == 'login' %}class="active"{% endif %}>Login</a>
+        <a href="{{ url_for('register') }}" {% if request.endpoint == 'register' %}class="active"{% endif %}>Register</a>
+    {% endif %}
     </div>
 
     {% with messages = get_flashed_messages(with_categories=true) %}
