@@ -55,7 +55,7 @@
     <div class="top-navbar">
         <div class="logo">
             <a href="{{ url_for('home') }}">
-                <img src="{{ url_for('static', filename='logo.png') }}" alt="Recipe App Logo">
+                <img src="{{ url_for('static', filename='spartan.png') }}" alt="Recipe App Logo">
             </a>
         </div>
         <div class="search-bar">
@@ -70,8 +70,7 @@
                 <a href="{{ url_for('logout') }}">Exit Visitor Mode</a>
             {% else %}
                 <a href="{{ url_for('login') }}">Login</a>
-            {% endif %}
-        </div>
+            {% endif %}        </div>
     </div>
 
     <!-- Bottom navbar: regular nav links -->
