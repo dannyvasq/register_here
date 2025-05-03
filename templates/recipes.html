@@ -8,6 +8,49 @@
     
     <h2>Your Saved Recipes</h2>
     
+    <style>
+        table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0 16px;
+        }
+
+        th, td {
+            padding: 16px 20px;
+            text-align: left;
+            vertical-align: top;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        td {
+        background-color: #fff;
+        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+        }
+
+        td a {
+            font-weight: bold;
+            color: #0074D9;
+            text-decoration: none;
+        }
+
+        td a:hover {
+            text-decoration: underline;
+        }
+
+        .delete-button {
+            margin-top: 10px;
+        }
+
+        tr:hover td {
+            background-color: #f9f9f9;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+        }
+    </style>
+
     <table>
         <tr>
             <th>Title</th>
@@ -17,9 +60,9 @@
         {% for recipe in recipes %}
         <tr>
             <td><a href="{{ url_for('recipe_details', id=recipe.id) }}">{{ recipe.title }}</a></td>
-            <td>{{ recipe.description }}</td>
+            <td><div style="max-width: 500px;">{{ recipe.description }}</div></td>
             <td>
-                <form action="{{ url_for('delete_recipe', id=recipe.id) }}" method="POST" style="display:inline;">
+                <form action="{{ url_for('delete_recipe', id=recipe.id) }}" method="POST" class="delete-button">
                     <button type="submit">Delete</button>
                 </form>
             </td>
