@@ -4,6 +4,10 @@
 {% block content %}
     <h1>{{ recipe.title }}</h1>
 
+    {% if recipe.image_filename %}
+        <img src="{{ url_for('static', filename='uploads/' + recipe.image_filename) }}" alt="{{ recipe.title }}" style="width: 100%; max-width: 600px; height: auto; margin-top: 16px; border-radius: 8px;">
+    {% endif %}
+
     <p><strong>Description:</strong> {{ recipe.description }}</p>
     
     {% if recipe.ingredients %}
@@ -25,34 +29,17 @@
     {% endif %}
 
     <p><strong>Created on:</strong> {{ recipe.created.strftime('%B %d, %Y at %I:%M %p') }}</p>
-    {% if current_user.is_authenticated %}
-        {% if current_user.id == recipe.user.id %}
-            <!-- The owner sees Delete + Back to My Recipes + Logout -->
-            <form action="{{ url_for('delete_recipe', id=recipe.id) }}" method="POST" style="display:inline;">
-                <button type="submit">Delete Recipe</button>
-            </form>    
 
-            <nav>
-                <ul>
-                    <li><a href="{{ url_for('recipes') }}">Back to Recipes</a></li>
-                    <li><a href="{{ url_for('logout') }}">Logout</a></li>
-                </ul>
-             </nav>
-    
-    {% else %}
-            <!-- Logged-in user but not the owner sees "See more recipes" + Logout -->
-            <nav>
-                <ul>
-                    <li><a href="{{ url_for('user_recipes', user_id=recipe.user.id) }}">See more recipes from {{ recipe.user.username }}</a></li>
-                    <li><a href="{{ url_for('logout') }}">Logout</a></li>
-                </ul>
-            </nav>
-        {% endif %}
-{% else %}
-    <!-- Not logged in user -->
-    <p style="margin-top: 20px; font-style: italic; color: gray;">
-        You must <a href="{{ url_for('login') }}">login</a> to see more recipes.
-    </p>
-{% endif %}
-{% endblock %}
+    {% if current_user.is_authenticated and current_user.id == recipe.user_id %}
+        <div style="margin-top: 20px;">
+            <form action="{{ url_for('delete_recipe', id=recipe.id) }}" method="POST" style="display:inline;">
+                <button type="submit">Delete</button>
+            </form>
+
+            <a href="{{ url_for('edit_recipe', id=recipe.id) }}">
+                <button style="margin-left: 10px;">Edit</button>
+            </a>
+        </div>
+    {% endif %}
+    {% endblock %}
 

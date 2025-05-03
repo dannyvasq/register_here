@@ -92,6 +92,26 @@ def recipe_details(id):
     recipe = Recipe.query.get_or_404(id)
     return render_template('recipe_details.html', recipe=recipe)
 
+@app.route('/edit_recipe/<int:id>', methods=['GET', 'POST'])
+@login_required
+def edit_recipe(id):
+    recipe = Recipe.query.get_or_404(id)
+    if recipe.user_id != current_user.id:
+        abort(403)
+
+    form = RecipeForm(obj=recipe)
+
+    if form.validate_on_submit():
+        recipe.title = form.title.data
+        recipe.description = form.description.data
+        recipe.ingredients = form.ingredients.data
+        recipe.instructions = form.instructions.data
+        db.session.commit()
+        flash('Recipe updated successfully!', 'success')
+        return redirect(url_for('recipes'))
+
+    return render_template('edit_recipe.html', form=form)
+
 @app.route('/delete_recipe/<int:id>', methods=['POST'])
 @login_required
 def delete_recipe(id):
