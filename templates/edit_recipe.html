@@ -1,15 +1,71 @@
 
 {% extends "base.html" %}
 {% block title %}Edit Recipe{% endblock %}
+
 {% block content %}
 <h2>Edit Recipe</h2>
-<form method="POST">
+
+<form method="POST" enctype="mulitpart/form-data">
     {{ form.hidden_tag() }}
-    <p>{{ form.title.label }}<br>{{ form.title(size=50) }}</p>
-    <p>{{ form.description.label }}<br>{{ form.description(rows=3, cols=50) }}</p>
-    <p>{{ form.ingredients.label }}<br>{{ form.ingredients(rows=5, cols=50) }}</p>
-    <p>{{ form.instructions.label }}<br>{{ form.instructions(rows=8, cols=50) }}</p>
+
+    <p>
+        {{ form.title.label }}<br>
+        {{ form.title(size=50) }}
+    </p>
+    
+    <p>
+        {{ form.description.label }}<br>
+        {{ form.description(rows=3, cols=50) }}
+    </p>
+
+    <p>
+        {{ form.ingredients.label }}<br>
+        {{ form.ingredients(rows=5, cols=50) }}
+    </p>
+    
+    <p>
+        {{ form.instructions.label }}<br>
+        {{ form.instructions(rows=8, cols=50) }}
+    </p>
+    
+    <p><strong>Current Image:</strong></p>
+    {% if recipe.image_filename %}
+        <img id="current-image"
+            src="{{ url_for('static', filename='uploads/' + recipe.image_filename) }}"
+            alt="Current Recipe Image"
+            style="width: 200px; height: auto; border-radius: 6px; margin-bottom: 10px;">
+    {% endif %}
+
+    <img id="image-preview" src="#" alt="New image preview" style="display: none; width: 200px; height: auto; border-radius: 6px; margin-bottom: 10px;">
+
+    <p>
+        {{ form.image.label }}<br>
+        {{ form.image() }}
+    </p>
+
     <p>{{ form.submit() }}</p>
 </form>
+
+    <script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const imageInput = document.querySelector('input[type="file"]');
+        const preview = document.getElementById('image-preview');
+        const current = document.getElementById('current-image');
+
+        imageInput.addEventListener('change', function () {
+            const file = this.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    preview.src = e.target.result;
+                    preview.style.display = "block";
+                    if (current) current.style.display = "none";
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+    });
+    </script>
+
 {% endblock %}
 

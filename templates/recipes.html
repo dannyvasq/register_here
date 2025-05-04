@@ -9,50 +9,65 @@
     <style>
         .recipe-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 24px;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 32px 24px;
+            margin-top: 32px;
         }
 
         .recipe-card {
-            background-color: #fff;
-            border-radius: 8px;
-            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
-            overflow: hidden;
-            text-align: center;
-            cursor: pointer;
-            transition: transform 0.2s ease;
+            height: 240px;  
+            border-radius: 10px;
+            padding: 0;
             text-decoration: none;
             color: inherit;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            overflow: hidden;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.08);
         }
 
-        .recipe-card:hover {
-            transform: translateY(-5px);
-            background-color: #f9f9f9;
-        }
+        .has-image:hover {
+            transform: scale(1.03);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+        }        
 
         .recipe-card img {
             width: 100%;
-            height: 180px;
+            height: 150px;
             object-fit: cover;
         }
 
         .recipe-card-title {
-            padding: 12px;
+            padding: 10px;
             font-weight: bold;
-            font-size: 1.1em;
+            font-size: 1em;
+            text-align: center;
         }
     </style>
 
+    {% set colors = ['#FF6B6B', '#6BCB77', '#4D96FF', '#FFC75F', '#F9F871', '#A393EB', '#FF9671', '#00C9A7', '#D65DB1', '#845EC2'] %}
+
     <div class="recipe-grid">
         {% for recipe in recipes %}
-        <a href="{{ url_for('recipe_details', id=recipe.id) }}" class="recipe-card">
-            <img src="{{ url_for('static', filename='uploads/' + recipe.image_filename) if recipe.image_filename else url_for('static', filename='images/placeholder.png') }}" alt="{{ recipe.title }}">
-            <div class="recipe-card-title">{{ recipe.title }}</div>
-        </a>
+            {% set color = colors[recipe.id % colors|length] %}
+
+            <a href="{{ url_for('recipe_details', id=recipe.id) }}" class="recipe-card"
+                style="background-color: {% if recipe.image_filename %}transparent{% else %}{{ color }}{% endif %};">
+
+                {% if recipe.image_filename %}
+                    <img src="{{ url_for('static', filename='uploads/' + recipe.image_filename) }}" 
+                        alt="{{ recipe.title }}" 
+                        style="width: 100%; height: 180px; object-fit: cover;">
+                {% else %}
+                    <div class="recipe-card-title" style="margin-top: auto; color: white;">
+                        {{ recipe.title }}
+                    </div>
+                {% endif %}
+            </a>
         {% endfor %}
     </div>
     {% endblock %}
-
-
 
 

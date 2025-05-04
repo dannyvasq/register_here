@@ -7,7 +7,7 @@
 </head>
 <body>
     <h1>Create A New Recipe</h1>
-    <form method="POST">
+    <form method="POST" enctype="multipart/form-data">
         {{ form.hidden_tag() }}
         <p>
             {{ form.title.label }}<br>
@@ -24,6 +24,10 @@
         <p>
             {{ form.instructions.label }}<br>
             {{ form.instructions(cols=40, row=4) }}
+        </p>
+        <p>
+            {{ form.image.label }}<br>
+            {{ form.image() }}
         </p>
         <p>{{ form.submit() }}</p>
     </form>
