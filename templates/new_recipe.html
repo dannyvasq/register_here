@@ -1,12 +1,11 @@
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>New Recipe</title>
-</head>
-<body>
+{% extends "base.html" %}
+{% block title %}New Recipe{% endblock %}
+
+{% block content %}
+
     <h1>Create A New Recipe</h1>
+
     <form method="POST" enctype="multipart/form-data">
         {{ form.hidden_tag() }}
         <p>
@@ -37,6 +36,6 @@
             <li><a href="{{ url_for('logout') }}">Press Here for Logout</a></li>
         </ul>
     </nav>
-</body>
-</html>
+{% endblock %}
+
 

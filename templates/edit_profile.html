@@ -1,22 +1,22 @@
 
-#displaying contents of old form and offering space to add new information in
-<html lang='en'>
-<head>
-<meta charset="UTF-8">
-<title>Edit Profile</title>
-</head>
-<body>
-<h1>Current Bio for User {{ profile.username }}</h1>
-{{ profile.bio }}<br>
-<body>
-    <form method="POST">
-    <h2>New bio:</h2>
-      {{ form.bio }}<br>
-      {{ form.submit }}
-    </form>
+{% extends "base.html" %}
+{% block title %}Edit Profile{% endblock %}
+
+{% block content %}
+<h1>Current Bio for {{ profile.username }}</h1>
+<p>{{ profile.bio }}</p>
+
+<form method="POST">
+    {{ form.hidden_tag() }}
+    <h2>New Bio:</h2>
+    <p>{{ form.bio(rows=4, cols=50) }}</p>
+    <p>{{ form.submit() }}</p>
+</form>
+
 <nav>
     <ul>
-        <li><a href="{{ url_for('profile') }}">Back to Profile</a></li>
-</body>
-</html>
+        <li><a href="{{ url_for('view_profile') }}">Back to Profile</a></li>
+    </ul>
+</nav>
+{% endblock %}
 
